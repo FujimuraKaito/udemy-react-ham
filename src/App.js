@@ -1,26 +1,31 @@
+// ReactはJSXを使うときは必要(for JSX)
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      {/* returnの中は一つの要素のみ→Vueと同じ */}
+      <div className="App">
+        {/* classNameはhtmlのclassと一緒 */}
+        <h1>Hello, React!</h1>
+        <label htmlFor="bar">bar</label>
+        <input type="text" onClick={() => {console.log('this is clicked.')}}></input>
+        <input type="text" onChange={() => {console.log('this is changed.')}}></input>
+      </div>
+    </React.Fragment>
+    
   );
 }
+
+// 以下のようにトランスパイルされる
+// function App() {
+//   return (
+//     React.createElement(
+//       "div", 
+//       null, 
+//       "Hello, React!"
+//     )
+//   );
+// }
 
 export default App;
