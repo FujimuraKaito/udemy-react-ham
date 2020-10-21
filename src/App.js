@@ -1,6 +1,7 @@
 // ReactはJSXを使うときは必要(for JSX)
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 
 // functional component
 function App() {
@@ -26,6 +27,8 @@ function App() {
         <label htmlFor="bar">bar</label>
         <input type="text" onClick={() => {console.log('this is clicked.')}}></input>
         <input type="text" onChange={() => {console.log('this is changed.')}}></input>
+
+        <Counter></Counter>
       </div>
     </React.Fragment>
     
@@ -49,6 +52,36 @@ User.propTypes = {
   name: PropTypes.string,
   // ageがrequiredであることを設定する
   age: PropTypes.number.isRequired
+}
+
+// カウンターコンポーネント
+class Counter extends Component {
+  // コンストラクター関数→Counterクラスが作成された時に実行される
+  constructor(props) {
+    super(props)
+    console.log(this.state)
+    this.state = {count: 0}
+  }
+
+  handlePlusButton = () => {
+    // stateを変更するときは必ずsetState
+    // DOMを変更したい時
+    this.setState({ count: this.state.count + 1 })
+  }
+  handleMinusButton = () => {
+    this.setState({ count: this.state.count - 1 })
+  }
+
+  render() {
+    // setStateが実行されるたびcallbackでにrenderが実行される
+    return(
+      <React.Fragment>
+        <div>counter: {this.state.count}</div>
+        <button onClick={this.handlePlusButton}>+1</button>
+        <button onClick={this.handleMinusButton}>-1</button>
+      </React.Fragment>
+    )
+  }
 }
 
 
