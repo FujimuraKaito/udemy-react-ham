@@ -1,6 +1,9 @@
 // ReactはJSXを使うときは必要(for JSX)
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
+
+import { increment, decrement } from '../actions'
 
 
 // functional component
@@ -57,32 +60,43 @@ User.propTypes = {
 // カウンターコンポーネント
 class Counter extends Component {
   // コンストラクター関数→Counterクラスが作成された時に実行される
-  constructor(props) {
-    super(props)
-    console.log(this.state)
-    this.state = {count: 0}
-  }
+  // constructor(props) {
+    // super(props)
+    // console.log(this.state)
+    // this.state = {count: 0}
+  // }
 
-  handlePlusButton = () => {
-    // stateを変更するときは必ずsetState
-    // DOMを変更したい時
-    this.setState({ count: this.state.count + 1 })
-  }
-  handleMinusButton = () => {
-    this.setState({ count: this.state.count - 1 })
-  }
+  // actionCreaterで同じことを実現しているので不要
+  // handlePlusButton = () => {
+  //   // stateを変更するときは必ずsetState
+  //   // DOMを変更したい時
+  //   this.setState({ count: this.state.count + 1 })
+  // }
+  // handleMinusButton = () => {
+  //   this.setState({ count: this.state.count - 1 })
+  // }
 
   render() {
+    const props = this.props
+
     // setStateが実行されるたびcallbackでにrenderが実行される
     return(
       <React.Fragment>
-        <div>counter: {this.state.count}</div>
-        <button onClick={this.handlePlusButton}>+1</button>
-        <button onClick={this.handleMinusButton}>-1</button>
+        <div>value: {props.value}</div>
+        <button onClick={props.increment}>+1</button>
+        <button onClick={props.decrement}>-1</button>
       </React.Fragment>
     )
   }
 }
+
+const mapStateToProps = state => ({ value: state.count.value })
+
+const mapDispatchToProps = dispatch => ({
+  increment: () => dispatch(increment()),
+  decrement: () => dispatch(decrement()),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 
 
@@ -97,4 +111,4 @@ class Counter extends Component {
 //   );
 // }
 
-export default App;
+// export default App;
