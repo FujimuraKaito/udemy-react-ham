@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 
-import { increment, decrement } from '../actions'
+// import { increment, decrement } from '../actions'
+import { readEvents } from '../actions'
 
 
 // functional component
@@ -57,54 +58,71 @@ User.propTypes = {
   age: PropTypes.number.isRequired
 }
 
-// カウンターコンポーネント
-class App extends Component {
-  // コンストラクター関数→Counterクラスが作成された時に実行される
-  // storeを使用しないで実装した場合
-  // constructor(props) {
-    // super(props)
-    // console.log(this.state)
-    // this.state = { count: 0 }
-  // }
+// // カウンターコンポーネント
+// class App extends Component {
+//   // コンストラクター関数→Counterクラスが作成された時に実行される
+//   // storeを使用しないで実装した場合
+//   // constructor(props) {
+//     // super(props)
+//     // console.log(this.state)
+//     // this.state = { count: 0 }
+//   // }
 
-  // actionCreaterで同じことを実現しているので不要
-  // handlePlusButton = () => {
-  //   // stateを変更するときは必ずsetState
-  //   // DOMを変更したい時
-  //   this.setState({ count: this.state.count + 1 })
-  // }
-  // handleMinusButton = () => {
-  //   this.setState({ count: this.state.count - 1 })
-  // }
+//   // actionCreaterで同じことを実現しているので不要
+//   // handlePlusButton = () => {
+//   //   // stateを変更するときは必ずsetState
+//   //   // DOMを変更したい時
+//   //   this.setState({ count: this.state.count + 1 })
+//   // }
+//   // handleMinusButton = () => {
+//   //   this.setState({ count: this.state.count - 1 })
+//   // }
 
+//   render() {
+//     // ここがよくわからん
+//     const props = this.props
+
+//     // setStateが実行されるたびcallbackでにrenderが実行される
+//     return(
+//       <React.Fragment>
+//         <div>value: {props.value}</div>
+//         {/* ここではActionを呼んでいる？ */}
+//         <button onClick={props.increment}>+1</button>
+//         <button onClick={props.decrement}>-1</button>
+//       </React.Fragment>
+//     )
+//   }
+// }
+
+class EventsIndex extends Component {
+  // componentがmountされた時に実行される関数
+  componentDidMount() {
+    this.props.readEvents()
+  }
   render() {
-    // ここがよくわからん
-    const props = this.props
+    // const props = this.props
 
-    // setStateが実行されるたびcallbackでにrenderが実行される
-    return(
+    return (
       <React.Fragment>
-        <div>value: {props.value}</div>
-        {/* ここではActionを呼んでいる？ */}
-        <button onClick={props.increment}>+1</button>
-        <button onClick={props.decrement}>-1</button>
+        
       </React.Fragment>
     )
   }
 }
 
 // state内の情報を取ってきてマッピングする
-const mapStateToProps = state => ({ value: state.count.value })
+const mapStateToProps = state => ({})
+// const mapStateToProps = state => ({ value: state.count.value })
 
 // dispatchはtypeに応じて処理を分ける
 // const mapDispatchToProps = dispatch => ({
 //   increment: () => dispatch(increment()),
 //   decrement: () => dispatch(decrement()),
 // })
-// ショートハンド
-const mapDispatchToProps = ({ increment, decrement })
+// ショートハンド→同じ名前の時は使える
+const mapDispatchToProps = ({ readEvents })
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(EventsIndex)
 
 
 
