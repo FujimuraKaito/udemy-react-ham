@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// storeを作成するためのパッケージ
 import { createStore } from 'redux';
 import { Provider } from 'react-redux'
 
@@ -9,12 +10,12 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
 // アプリケーション内部で唯一
+// 引数にrecuderを渡す
 const store = createStore(reducer)
-
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* storeがアプリないのどこからでも使えるようにする */}
+    {/* storeがアプリ内のどこからでも使えるようにする */}
     <Provider store={store}>
       <App />
     </Provider>

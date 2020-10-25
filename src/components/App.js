@@ -7,41 +7,41 @@ import { increment, decrement } from '../actions'
 
 
 // functional component
-function App() {
-  const profiles = [
-    { name: "Kaito", age: 20 },
-    { name: "Hanako", age: 18 },
-    { name: "Katsuo" }
-  ]
-  return (
-    <React.Fragment>
-      {/* returnの中は一つの要素のみ→Vueと同じ */}
-      <div className="App">
-        {/* classNameはhtmlのclassと一緒 */}
-        <h1>Hello, React!</h1>
-        <Cat />
-        {
-          profiles.map((profile, index) => {
-            // 配列の数だけ表示
-            // VueのようにkeyがないとDOMに変更が反映される時に困る
-            return <User name={profile.name} age={profile.age} key={index} />
-          })
-        }
-        <label htmlFor="bar">bar</label>
-        <input type="text" onClick={() => {console.log('this is clicked.')}}></input>
-        <input type="text" onChange={() => {console.log('this is changed.')}}></input>
+// function App() {
+//   const profiles = [
+//     { name: "Kaito", age: 20 },
+//     { name: "Hanako", age: 18 },
+//     { name: "Katsuo" }
+//   ]
+//   return (
+//     <React.Fragment>
+//       {/* returnの中は一つの要素のみ→Vueと同じ */}
+//       <div className="App">
+//         {/* classNameはhtmlのclassと一緒 */}
+//         <h1>Hello, React!</h1>
+//         <Cat />
+//         {
+//           profiles.map((profile, index) => {
+//             // 配列の数だけ表示
+//             // VueのようにkeyがないとDOMに変更が反映される時に困る
+//             return <User name={profile.name} age={profile.age} key={index} />
+//           })
+//         }
+//         <label htmlFor="bar">bar</label>
+//         <input type="text" onClick={() => {console.log('this is clicked.')}}></input>
+//         <input type="text" onChange={() => {console.log('this is changed.')}}></input>
 
-        <Counter></Counter>
-      </div>
-    </React.Fragment>
+//         <Counter></Counter>
+//       </div>
+//     </React.Fragment>
     
-  );
-}
+//   );
+// }
 
 // こんな感じの関数型定義もできる
-const Cat = () => {
-  return <div><h1>Hello, cat!</h1></div>
-}
+// const Cat = () => {
+//   return <div><h1>Hello, cat!</h1></div>
+// }
 
 // props→再利用できる
 const User = (props) => {
@@ -58,12 +58,13 @@ User.propTypes = {
 }
 
 // カウンターコンポーネント
-class Counter extends Component {
+class App extends Component {
   // コンストラクター関数→Counterクラスが作成された時に実行される
+  // storeを使用しないで実装した場合
   // constructor(props) {
     // super(props)
     // console.log(this.state)
-    // this.state = {count: 0}
+    // this.state = { count: 0 }
   // }
 
   // actionCreaterで同じことを実現しているので不要
@@ -77,12 +78,14 @@ class Counter extends Component {
   // }
 
   render() {
+    // ここがよくわからん
     const props = this.props
 
     // setStateが実行されるたびcallbackでにrenderが実行される
     return(
       <React.Fragment>
         <div>value: {props.value}</div>
+        {/* ここではActionを呼んでいる？ */}
         <button onClick={props.increment}>+1</button>
         <button onClick={props.decrement}>-1</button>
       </React.Fragment>
@@ -90,12 +93,17 @@ class Counter extends Component {
   }
 }
 
+// state内の情報を取ってきてマッピングする
 const mapStateToProps = state => ({ value: state.count.value })
 
-const mapDispatchToProps = dispatch => ({
-  increment: () => dispatch(increment()),
-  decrement: () => dispatch(decrement()),
-})
+// dispatchはtypeに応じて処理を分ける
+// const mapDispatchToProps = dispatch => ({
+//   increment: () => dispatch(increment()),
+//   decrement: () => dispatch(decrement()),
+// })
+// ショートハンド
+const mapDispatchToProps = ({ increment, decrement })
+
 export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 
