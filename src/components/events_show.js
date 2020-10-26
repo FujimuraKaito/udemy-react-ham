@@ -3,15 +3,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { Link } from 'react-router-dom';
-// import { Link } from 'react-router-dom'
 
-import { postEvent } from '../actions'
+import { getEvent, deleteEvent, putEvent } from '../actions'
 
-class EventsNew extends Component {
+class EventsShow extends Component {
   constructor(props) {
     super(props)
     // クラスのインスタンスでonSubmitが使える状態にする
     this.onSubmit = this.onSubmit.bind(this)
+    this.onDeleteClick = this.onDeleteClick.bind(this)
   }
   // 入力されるフィールドの値が渡ってくる
   renderField(field) {
@@ -26,7 +26,14 @@ class EventsNew extends Component {
   }
 
   async onSubmit(values) {
-    await this.props.postEvent(values)
+    // await this.props.postEvent(values)
+    this.props.history.push('/')
+  }
+
+  async onDeleteClick() {
+    // matchとあは？
+    const { id } = this.props.match.params
+    await this.props.deleteEvent(id)
     this.props.history.push('/')
   }
 
@@ -44,6 +51,8 @@ class EventsNew extends Component {
             {/* フォームが入力されるか一度押されたら，ボタンをdisableにしておく */}
             <input type="submit" value="Submit" disabled={pristine || submitting} />
             <Link to="/">Cancel</Link>
+            <Link to="/" onClick={this.onDeleteClick}>Delete</Link>
+
           </div>
         </form>
       </React.Fragment>
@@ -61,9 +70,9 @@ const validate = values => {
 }
 
 // ショートハンド→同じ名前の時は使える
-const mapDispatchToProps = ({ postEvent })
+const mapDispatchToProps = ({ deleteEvent })
 
 export default connect(null, mapDispatchToProps)(
-  reduxForm({ validate, form: 'eventNewForm' })(EventsNew)
+  reduxForm({ validate, form: 'eventShowForm' })(EventsShow)
   )
 

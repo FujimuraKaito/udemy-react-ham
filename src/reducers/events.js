@@ -3,7 +3,10 @@
 // 主にstateの状態を変更する核の部分を記述する
 // import { INCREMENT, DECREMENT } from '../actions'
 import _ from 'lodash'
-import { READ_EVENTS } from '../actions'
+import {
+  READ_EVENTS,
+  DELETE_EVENT
+} from '../actions'
 
 // const initialState = { value: 0 }
 
@@ -14,6 +17,11 @@ export default (events = {}, action) => {
       // response.dataはオブジェクトの配列なのでそれをidをキーにして中身のオブジェクトを値にしたオブジェクトにするとアクセスが楽
       // →loadashというパッケージを使用する
       return _.mapKeys(action.response.data, 'id')
+    case DELETE_EVENT:
+      // action.idは渡されてきたidなので削除するid
+      delete events[action.id]
+      // スプレッド演算子を使うことで更新後の値を保存する
+      return { ...events }
     default:
       return events
   }
