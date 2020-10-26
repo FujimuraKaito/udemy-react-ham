@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
+import _ from 'lodash'
 
 // import { increment, decrement } from '../actions'
 import { readEvents } from '../actions'
@@ -99,19 +100,43 @@ class EventsIndex extends Component {
   componentDidMount() {
     this.props.readEvents()
   }
+
+  renderEvents() {
+    // 配列を扱いやすい形に成形して表示する
+    return _.map(this.props.events, event => (
+      <tr key={event.id}>
+        <td>{event.id}</td>
+        <td>{event.title}</td>
+        <td>{event.body}</td>
+      </tr>
+    ))
+  }
+
   render() {
     // const props = this.props
 
     return (
       <React.Fragment>
-        
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Body</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {this.renderEvents()}  
+          </tbody>
+        </table>
       </React.Fragment>
     )
   }
 }
 
 // state内の情報を取ってきてマッピングする
-const mapStateToProps = state => ({})
+const mapStateToProps = state => ({ events: state.events })
 // const mapStateToProps = state => ({ value: state.count.value })
 
 // dispatchはtypeに応じて処理を分ける
