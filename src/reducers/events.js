@@ -4,15 +4,24 @@
 // import { INCREMENT, DECREMENT } from '../actions'
 import _ from 'lodash'
 import {
+  CREATE_EVENT,
   READ_EVENTS,
+  READ_EVENT,
+  UPDATE_EVENT,
   DELETE_EVENT
 } from '../actions'
+import { act } from 'react-dom/test-utils'
 
 // const initialState = { value: 0 }
 
 // Reducerは関数として定義し，引数に現在の状態と受け取るActionの種類をとる
 export default (events = {}, action) => {
   switch (action.type) {
+    case CREATE_EVENT:
+    case READ_EVENT:
+    case UPDATE_EVENT:
+      const data = action.response.data
+      return { ...events, [data.id]: data }
     case READ_EVENTS:
       // response.dataはオブジェクトの配列なのでそれをidをキーにして中身のオブジェクトを値にしたオブジェクトにするとアクセスが楽
       // →loadashというパッケージを使用する

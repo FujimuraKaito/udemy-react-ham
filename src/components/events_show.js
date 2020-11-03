@@ -5,6 +5,7 @@ import { Field, reduxForm } from 'redux-form'
 import { Link } from 'react-router-dom';
 
 import { getEvent, deleteEvent, putEvent } from '../actions'
+import events from '../reducers/events';
 
 class EventsShow extends Component {
   constructor(props) {
@@ -13,6 +14,12 @@ class EventsShow extends Component {
     this.onSubmit = this.onSubmit.bind(this)
     this.onDeleteClick = this.onDeleteClick.bind(this)
   }
+  // レンダリングが完了したらイベント情報を拾ってくるという処理を書かないといけない
+  componentDidMount() {
+    const { id } = this.props.match.params
+    if (id) this.props.getEvent(id)
+  }
+
   // 入力されるフィールドの値が渡ってくる
   renderField(field) {
     const { input, label, type, meta: {touched, error} } = field
@@ -26,7 +33,7 @@ class EventsShow extends Component {
   }
 
   async onSubmit(values) {
-    // await this.props.postEvent(values)
+    await this.props.putEvent(values)
     this.props.history.push('/')
   }
 
@@ -41,7 +48,7 @@ class EventsShow extends Component {
   render() {
     // pristineはフォームが入力されているかどうか
     // submittingはフォームがsubmitされたかどうか
-    const { handleSubmit, pristine, submitting } = this.props
+    const { handleSubmit, pristine, submitting, invalid } = this.props
     return (
       <React.Fragment>
         <form onSubmit={handleSubmit(this.onSubmit)}>
@@ -49,7 +56,7 @@ class EventsShow extends Component {
           <div><Field label="Body" name="body" type='text' component={this.renderField} /></div>
           <div>
             {/* フォームが入力されるか一度押されたら，ボタンをdisableにしておく */}
-            <input type="submit" value="Submit" disabled={pristine || submitting} />
+            <input type="submit" value="Submit" disabled={pristine || submitting || invalid} />
             <Link to="/">Cancel</Link>
             <Link to="/" onClick={this.onDeleteClick}>Delete</Link>
 
@@ -69,10 +76,16 @@ const validate = values => {
   return errors
 }
 
-// ショートハンド→同じ名前の時は使える
-const mapDispatchToProps = ({ deleteEvent })
+const mapStateToProps = (state, ownProps) => {
+  const event = state.events[ownProps.match.params.id]
+  return { initialValues: event, event }
+}
 
-export default connect(null, mapDispatchToProps)(
-  reduxForm({ validate, form: 'eventShowForm' })(EventsShow)
+// ショートハンド→同じ名前の時は使える
+const mapDispatchToProps = ({ deleteEvent, getEvent, putEvent })
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  // enableReinitializeはinitialValueの値が変わるたびにフォームが毎回初期化されるというプロパティ
+  reduxForm({ validate, form: 'eventShowForm', enableReinitialize: true })(EventsShow)
   )
 
